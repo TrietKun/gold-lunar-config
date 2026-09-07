@@ -1,0 +1,42 @@
+name: Nhận định giá vàng hàng ngày
+
+on:
+  schedule:
+    # 18:10 giờ Việt Nam (11:10 UTC), sau khi các tiệm chốt giá trong ngày.
+    - cron: '10 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: forecast
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Sinh nhận định
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node scripts/forecast.mjs
+
+      - name: Commit nếu có thay đổi
+        run: |
+          if [ -z "$(git status --porcelain forecast/v1.json)" ]; then
+            echo "Không có thay đổi."
+            exit 0
+          fi
+          git config user.name "gold-lunar-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add forecast/v1.json
+          git commit -m "chore: nhận định ngày $(TZ=Asia/Ho_Chi_Minh date +%d/%m/%Y)"
+          git push
