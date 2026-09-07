@@ -71,6 +71,37 @@ async function domesticSeries(today) {
   return out;
 }
 
+/** Giá SJC hôm nay từ PNJ (nghìn đồng/chỉ -> đồng/lượng). */
+async function pnjSjcToday() {
+  const data = await getJson('https://edge-api.pnj.io/ecom-frontend/v1/get-gold-price?zone=00');
+  const row = (data.data ?? []).find((r) => r.masp === 'SJC');
+  if (!row) throw new Error('pnj: không thấy dòng SJC');
+  return { at: data.updateDate ?? '', buy: Number(row.giamua) * 10000, sell: Number(row.giaban) * 10000 };
+}
+
+/**
+ * Giá SJC hôm nay. Ưu tiên BTMC cho khớp với giá tiêu đề trong app, nhưng
+ * btmc.vn chặn kết nối từ máy chủ GitHub nên trên CI sẽ rơi về PNJ.
+ * Hai nơi cùng niêm yết theo giá SJC nên chênh lệch hiếm khi đủ để đổi kết luận;
+ * nếu có lệch thì app tự bỏ qua lời của mô hình và dùng mẫu câu.
+ */
+async function sjcToday() {
+  const problems = [];
+  for (const [name, fn] of [['btmc', btmcSjcToday], ['pnj', pnjSjcToday]]) {
+    try {
+      const v = await fn();
+      if (v) {
+        console.log(`Giá SJC hôm nay lấy từ ${name}.`);
+        return v;
+      }
+      problems.push(`${name}: không có dữ liệu`);
+    } catch (e) {
+      problems.push(e.message);
+    }
+  }
+  throw new Error(problems.join(' | '));
+}
+
 /** Giá SJC hôm nay từ BTMC (đồng/chỉ -> đồng/lượng). */
 async function btmcSjcToday() {
   const data = await getJson(
@@ -260,7 +291,7 @@ async function main() {
     yahooCloses('GC=F'),
     yahooCloses('VND=X'),
     domesticSeries(today),
-    btmcSjcToday(),
+    sjcToday(),
   ]);
   for (const [name, r] of [['vàng thế giới', goldR], ['tỷ giá', fxR], ['lịch sử trong nước', domesticR], ['giá SJC hôm nay', sjcR]]) {
     if (r.status === 'rejected') console.error(`Nguồn ${name} lỗi: ${r.reason.message}`);
