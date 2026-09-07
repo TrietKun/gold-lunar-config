@@ -9,9 +9,20 @@ const DISCLAIMER = 'Nhận định chỉ mang tính tham khảo, không phải l
 const UA = 'Mozilla/5.0 (Linux; Android 14) GoldLunar/1.0';
 
 async function getJson(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA } });
-  if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
-  return res.json();
+  const host = new URL(url).host;
+  let res;
+  try {
+    res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20000) });
+  } catch (e) {
+    // fetch() chỉ ném "fetch failed" nên phải tự gắn host vào, nếu không log CI vô dụng.
+    throw new Error(`${host}: không kết nối được (${e.cause?.code ?? e.name}: ${e.cause?.message ?? e.message})`);
+  }
+  if (!res.ok) throw new Error(`${host}: HTTP ${res.status}`);
+  try {
+    return await res.json();
+  } catch (e) {
+    throw new Error(`${host}: trả về không phải JSON (${e.message})`);
+  }
 }
 
 function vnNow() {
@@ -244,12 +255,20 @@ async function main() {
   const today = vnNow();
   const todayKey = dateKey(today);
 
-  const [gold, fx, domestic, sjc] = await Promise.all([
+  // Promise.allSettled để một nguồn hỏng không giết cả lần chạy, và log nêu rõ nguồn nào.
+  const [goldR, fxR, domesticR, sjcR] = await Promise.allSettled([
     yahooCloses('GC=F'),
     yahooCloses('VND=X'),
     domesticSeries(today),
     btmcSjcToday(),
   ]);
+  for (const [name, r] of [['vàng thế giới', goldR], ['tỷ giá', fxR], ['lịch sử trong nước', domesticR], ['giá SJC hôm nay', sjcR]]) {
+    if (r.status === 'rejected') console.error(`Nguồn ${name} lỗi: ${r.reason.message}`);
+  }
+  const gold = goldR.status === 'fulfilled' ? goldR.value : [];
+  const fx = fxR.status === 'fulfilled' ? fxR.value : [];
+  const domestic = domesticR.status === 'fulfilled' ? domesticR.value : [];
+  const sjc = sjcR.status === 'fulfilled' ? sjcR.value : null;
 
   if (!sjc) throw new Error('Không lấy được giá SJC hôm nay từ BTMC');
   domestic.push(sjc.sell);
