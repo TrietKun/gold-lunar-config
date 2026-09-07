@@ -144,7 +144,7 @@ Số liệu hôm nay:
 ${lines}
 
 Yêu cầu:
-- Viết đúng 2 đến 3 câu tiếng Việt, tổng dưới 70 từ.
+- Viết 2 đến 3 câu tiếng Việt, ngắn gọn, mỗi câu một ý.
 - Giải thích vì sao nghiêng về ${TREND_LABEL[trend]}, dựa trên các tín hiệu ở trên.
 - Không được kết luận khác với "${TREND_LABEL[trend]}".
 - Không bịa thêm số liệu nào ngoài các số đã cho.
@@ -172,6 +172,8 @@ async function askGemini(prompt, key) {
       const data = await res.json();
       const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
       if (!text.trim()) throw new Error(`trả về rỗng (finishReason=${data.candidates?.[0]?.finishReason})`);
+      const bad = validate(text);
+      if (bad) throw new Error(`đầu ra không đạt: ${bad}`);
       return { text: text.trim(), model: 'Gemini Flash' };
     } catch (e) {
       problems.push(`${model}: ${e.message}`);
@@ -201,6 +203,8 @@ async function askGroq(prompt, key) {
       const data = await res.json();
       const text = data.choices?.[0]?.message?.content ?? '';
       if (!text.trim()) throw new Error('trả về rỗng');
+      const bad = validate(text);
+      if (bad) throw new Error(`đầu ra không đạt: ${bad}`);
       return { text: text.trim(), model: 'Groq' };
     } catch (e) {
       problems.push(`${model}: ${e.message}`);
@@ -209,9 +213,29 @@ async function askGroq(prompt, key) {
   throw new Error(problems.join(' | '));
 }
 
+/**
+ * Chặn đầu ra hỏng trước khi ghi file. Từng gặp trường hợp mô hình tự đánh số
+ * từng từ rồi bị cắt giữa câu, nên phải kiểm tra thay vì tin tưởng mù quáng.
+ */
+function validate(text) {
+  const t = text.trim();
+  if (t.length < 60) return 'quá ngắn';
+  if (t.length > 700) return 'quá dài';
+  if (/\(\s*\d+\s*\)/.test(t)) return 'có đánh số từ, mô hình đi lạc';
+  if (/[(\[]\s*$/.test(t)) return 'bị cắt giữa chừng';
+  if (!/[.!?]$/.test(t)) return 'không kết thúc bằng dấu câu';
+  const sentences = t.split(/[.!?]+/).filter((x) => x.trim().length > 10);
+  if (sentences.length < 2) return 'ít hơn 2 câu';
+  if (sentences.length > 6) return 'nhiều hơn 6 câu';
+  if (!/[àáâãèéêìíòóôõùúýăđĩũơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/i.test(t)) {
+    return 'không phải tiếng Việt';
+  }
+  return null;
+}
+
 /** Bỏ ngoặc kép bao ngoài, gạch ngang dài, và bảo đảm có dòng miễn trừ trách nhiệm. */
 function clean(text) {
-  let out = text.replace(/^["'"']|["'"']$/g, '').replace(/[—–]/g, '-').trim();
+  let out = text.replace(/^["'"']|["'"']$/g, '').replace(/[—–‑]/g, '-').trim();
   if (!out.includes('tham khảo')) out = `${out} ${DISCLAIMER}`;
   return out.replace(/\s+/g, ' ');
 }
