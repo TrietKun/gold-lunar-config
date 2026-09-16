@@ -1,8 +1,8 @@
 {
-  "date": "20260915",
+  "date": "20260916",
   "trend": "down",
-  "confidence": 85,
-  "narrative": "Vàng SJC hiện đang giao dịch ở mức mua vào 142,3 triệu đồng và bán ra 145,3 triệu đồng mỗi lượng. Dự báo giá ngày mai có xu hướng giảm với độ tin cậy 85% do áp lực từ đà giảm 1,86% trong 3 phiên gần nhất và xu hướng trung bình 7 ngày thấp hơn 2,14% so với 30 ngày. Đồng thời, tỷ giá USD/VND cũng hạ nhiệt 0,40%, củng cố thêm nhận định về khả năng điều chỉnh giảm của thị trường. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
+  "confidence": 68,
+  "narrative": "Vàng SJC hiện giao dịch quanh mức 143,5 đến 146,5 triệu đồng/lượng, tăng 0,83% so với hôm qua. Dự báo giá ngày mai nghiêng về giảm với độ tin cậy 68%, chủ yếu do xu hướng vàng thế giới giảm 2,27% trong trung bình 7 ngày. Áp lực từ tỷ giá USD/VND giảm 0,40% cùng đà đi ngang của vàng thế giới trong 3 phiên gần nhất cũng củng cố nhận định này. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
   "model": "Groq",
-  "generatedAt": "2026-09-15T15:32:03.102Z"
+  "generatedAt": "2026-09-16T15:25:10.526Z"
 }
