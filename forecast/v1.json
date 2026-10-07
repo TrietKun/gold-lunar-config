@@ -1,8 +1,8 @@
 {
-  "date": "20261007",
+  "date": "20261008",
   "trend": "down",
   "confidence": 78,
-  "narrative": "Vàng thế giới giảm 3,13% trong 7 ngày so với 30 ngày và 3 phiên gần nhất giảm 0,46%, cho thấy xu hướng giảm. Mặc dù giá SJC trong nước tăng 0,35% so với hôm qua, nhưng chênh lệch giá với giá thế giới quy đổi vẫn giảm 9,5% và tỷ giá USD/VND trung tính, không hỗ trợ tăng giá. Do đó, giá vàng ngày mai có xu hướng giảm. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
+  "narrative": "Giá vàng SJC hôm nay mua 140.000.000đ/lượng, bán 143.000.000đ/lượng, trong khi tín hiệu thị trường cho thấy xu hướng giảm. Xu hướng vàng thế giới trong 7 ngày so với 30 ngày giảm 3,03% và đà 3 phiên gần nhất giảm 0,51%, đồng thời chênh lệch giá trong nước so với giá thế giới quy đổi giảm 10,3%. Vì vậy, dự báo giá vàng ngày mai nghiêng về giảm với độ tin cậy 78%. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
   "model": "Groq",
-  "generatedAt": "2026-10-06T17:13:07.578Z"
+  "generatedAt": "2026-10-07T17:49:00.298Z"
 }
