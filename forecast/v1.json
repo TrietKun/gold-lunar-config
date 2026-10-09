@@ -1,8 +1,8 @@
 {
-  "date": "20261009",
-  "trend": "down",
-  "confidence": 68,
-  "narrative": "Hôm nay, vàng miếng SJC giao dịch ở mức 140.000.000 đồng/lượng mua vào và 143.000.000 đồng/lượng bán ra. Áp lực đi xuống xuất hiện khi xu hướng vàng thế giới giảm 2,97% và mức chênh lệch giữa giá trong nước với thế giới quy đổi vẫn neo cao ở mức 10,2%. Do đó, giá ngày mai nghiêng về khả năng giảm với độ tin cậy 68%. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
-  "model": "Gemini Flash",
-  "generatedAt": "2026-10-08T17:50:24.281Z"
+  "date": "20261010",
+  "trend": "flat",
+  "confidence": 58,
+  "narrative": "Vàng SJC hôm nay giao dịch ở mức mua vào 141,8 triệu đồng và bán ra 144,8 triệu đồng mỗi lượng, tăng nhẹ 0,35% so với phiên trước. Dự báo giá ngày mai sẽ đi ngang với độ tin cậy 58% do lực đẩy tăng từ đà 3 phiên gần nhất của thế giới bị triệt tiêu bởi xu hướng giảm trung hạn. Chênh lệch giá trong nước so với thế giới quy đổi đang thu hẹp còn 10,1% trong khi tỷ giá USD/VND ổn định, tạo nền tảng cho mặt bằng giá giữ nguyên. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
+  "model": "Groq",
+  "generatedAt": "2026-10-09T17:25:01.117Z"
 }
