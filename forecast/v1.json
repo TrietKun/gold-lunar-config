@@ -1,8 +1,8 @@
 {
-  "date": "20261124",
+  "date": "20261125",
   "trend": "down",
-  "confidence": 70,
-  "narrative": "Hôm nay, giá vàng miếng SJC niêm yết ở mức 130.000.000 đồng/lượng mua vào và 135.000.000 đồng/lượng bán ra. Giá vàng ngày mai nghiêng về xu hướng giảm với độ tin cậy 70%. Dự báo này dựa trên tín hiệu từ thị trường thế giới khi xu hướng vàng giảm 4,86% và đà 3 phiên gần nhất tiếp tục giảm 2,87%. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
-  "model": "Gemini Flash",
-  "generatedAt": "2026-11-23T22:33:35.975Z"
+  "confidence": 78,
+  "narrative": "Giá vàng miếng SJC hôm nay mua 130 triệu đồng/lượng, bán 135 triệu đồng/lượng. Vì xu hướng giảm trong 7 đến 30 ngày (-5,54 %) và đà giảm trong 3 phiên gần nhất (-3,66 %) cùng với các tín hiệu khác ổn định, dự báo ngày mai giá có xu hướng giảm với độ tin cậy 78 %. Nhận định chỉ mang tính tham khảo, không phải lời khuyên đầu tư.",
+  "model": "Groq",
+  "generatedAt": "2026-11-24T21:06:16.517Z"
 }
